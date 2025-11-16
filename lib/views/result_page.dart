@@ -18,7 +18,9 @@ class ResultPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: lightTextColor),
-          onPressed: () {
+          onPressed: () async {
+            await context.read<ClassifyProvider>().getHistoryList();
+
             // Handle back navigation
             Navigator.pop(context);
           },

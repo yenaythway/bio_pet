@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:bio_pet/models/breed.dart';
 
-/// History model for a classification attempt.
+/// EachClassifying model for a classification attempt.
 ///
 /// This was previously named `HistoryEntry`. A small `HistoryEntry` subclass
 /// is provided at the end of the file for backward compatibility.
-class History {
+class EachClassifying {
   /// Local file path of the image used for classification (can be empty/null if not stored).
   final String imagePath;
 
@@ -16,13 +16,13 @@ class History {
   /// Top breed results returned by the classifier (ordered by confidence desc).
   final List<EachBreed> breeds;
 
-  History({
+  EachClassifying({
     required this.imagePath,
     required this.timestamp,
     required this.breeds,
   });
 
-  factory History.fromMap(Map<String, dynamic> map) {
+  factory EachClassifying.fromMap(Map<String, dynamic> map) {
     final breedList = <EachBreed>[];
     if (map['breeds'] is List) {
       for (final item in (map['breeds'] as List)) {
@@ -58,7 +58,7 @@ class History {
       }
     }
 
-    return History(
+    return EachClassifying(
       imagePath: map['imagePath'] as String? ?? '',
       timestamp:
           DateTime.tryParse(map['timestamp'] as String? ?? '') ??
@@ -77,15 +77,15 @@ class History {
 
   String toJson() => json.encode(toMap());
 
-  factory History.fromJson(String source) =>
-      History.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory EachClassifying.fromJson(String source) =>
+      EachClassifying.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  History copyWith({
+  EachClassifying copyWith({
     String? imagePath,
     DateTime? timestamp,
     List<EachBreed>? breeds,
   }) {
-    return History(
+    return EachClassifying(
       imagePath: imagePath ?? this.imagePath,
       timestamp: timestamp ?? this.timestamp,
       breeds: breeds ?? this.breeds,
@@ -94,20 +94,20 @@ class History {
 
   @override
   String toString() =>
-      'History(imagePath: $imagePath, timestamp: $timestamp, breeds: $breeds)';
+      'EachClassifying(imagePath: $imagePath, timestamp: $timestamp, breeds: $breeds)';
 }
 
 /// Backwards-compatible wrapper: keep `HistoryEntry` name working for callers
 /// that still reference it.
-class HistoryEntry extends History {
+class HistoryEntry extends EachClassifying {
   HistoryEntry({
-    required String imagePath,
-    required DateTime timestamp,
-    required List<EachBreed> breeds,
-  }) : super(imagePath: imagePath, timestamp: timestamp, breeds: breeds);
+    required super.imagePath,
+    required super.timestamp,
+    required super.breeds,
+  });
 
   factory HistoryEntry.fromMap(Map<String, dynamic> map) {
-    final h = History.fromMap(map);
+    final h = EachClassifying.fromMap(map);
     return HistoryEntry(
       imagePath: h.imagePath,
       timestamp: h.timestamp,
@@ -116,7 +116,7 @@ class HistoryEntry extends History {
   }
 
   factory HistoryEntry.fromJson(String source) {
-    final h = History.fromJson(source);
+    final h = EachClassifying.fromJson(source);
     return HistoryEntry(
       imagePath: h.imagePath,
       timestamp: h.timestamp,

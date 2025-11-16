@@ -22,6 +22,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ClassifyProvider>().initHelper();
+
+      context.read<ClassifyProvider>().getHistoryList();
     });
   }
 
@@ -30,15 +32,94 @@ class _HomePageState extends State<HomePage> {
     final paddingAll = Responsive.wp(context, 4); // dynamic padding
     return Scaffold(
       backgroundColor: darkBlueBackground,
+      appBar: AppBar(
+        backgroundColor: darkBlueBackground,
+        elevation: 0,
+        leading: Icon(
+          Icons.pets,
+          color: secondaryBlue,
+          size: Responsive.wp(context, 6),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Pet Classifier', style: TextStyles.mainTitle),
+            SizedBox(height: Responsive.hp(context, 0.4)),
+            Text(
+              'Advanced AI-powered pet identification',
+              style: TextStyles.subTitle,
+            ),
+          ],
+        ),
+        actions: [
+          Stack(
+            clipBehavior:
+                Clip.none, // Allows the badge to extend outside the container
+            children: [
+              // The main icon button container
+              Container(
+                width: 50, // Adjust size as needed
+                height: 50,
+
+                decoration: BoxDecoration(
+                  color: primaryBlue,
+                  // border: Border.all(color: Colors.white, width: 0.5),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.history,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                  onPressed: () {
+                    context.read<ClassifyProvider>().getHistoryList();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HistoryPage()),
+                    );
+                  },
+                ),
+              ),
+              // The Badge Counter
+              Positioned(
+                right: -5,
+                top: -5,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        Colors.red[400], // Use a distinct color for the badge
+                    // borderRadius: BorderRadius.circular(10),
+                    // border: Border.all(
+                    //   color: darkBlueBackground,
+                    //   width: 2,
+                    // ), // To match the dark background border
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 20,
+                    minHeight: 20,
+                  ),
+                  child: Text(
+                    '${context.read<ClassifyProvider>().historyList.length}',
+                    style: TextStyles.b3,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: 16),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(paddingAll),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- Header Section ---
-              _buildHeader(context),
-              SizedBox(height: Responsive.hp(context, 3.5)),
+              SizedBox(height: Responsive.hp(context, 4.5)),
 
               // --- Choose Image Source Section ---
               context.watch<ClassifyProvider>().isLoading
@@ -53,83 +134,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            // Icon (responsive size)
-            Icon(
-              Icons.pets,
-              color: secondaryBlue,
-              size: Responsive.wp(context, 6),
-            ),
-            SizedBox(width: Responsive.wp(context, 2)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Pet Classifier', style: TextStyles.mainTitle),
-                SizedBox(height: Responsive.hp(context, 0.4)),
-                Text(
-                  'Advanced AI-powered pet identification',
-                  style: TextStyles.subTitle,
-                ),
-              ],
-            ),
-          ],
-        ),
-        Stack(
-          clipBehavior:
-              Clip.none, // Allows the badge to extend outside the container
-          children: [
-            // The main icon button container
-            Container(
-              width: 50, // Adjust size as needed
-              height: 50,
-              decoration: BoxDecoration(
-                color: primaryBlue,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.history, color: Colors.white, size: 24),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HistoryPage()),
-                  );
-                },
-              ),
-            ),
-            // The Badge Counter
-            Positioned(
-              right: -5,
-              top: -5,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red[400], // Use a distinct color for the badge
-                  // borderRadius: BorderRadius.circular(10),
-                  // border: Border.all(
-                  //   color: darkBlueBackground,
-                  //   width: 2,
-                  // ), // To match the dark background border
-                ),
-                constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
-                child: Text(
-                  '1',
-                  style: TextStyles.b3,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -160,16 +164,8 @@ class _HomePageState extends State<HomePage> {
           // Open Camera Button
           ElevatedButton.icon(
             onPressed: () async {
-              //  cleanResult();
-              // final result = await imagePicker.pickImage(
-              //   source: ImageSource.camera,
-              // );
-
-              // imagePath = result?.path;
-              // setState(() {});
-              // processImage();
               await context.read<ClassifyProvider>().pickImage(
-                ImageSource.camera,
+                ImageSource.gallery,
               );
               if (context.read<ClassifyProvider>().imagePath != null &&
                   context.read<ClassifyProvider>().imagePath!.isNotEmpty) {
@@ -181,10 +177,10 @@ class _HomePageState extends State<HomePage> {
               }
             },
             icon: Icon(
-              Icons.camera_alt_outlined,
+              Icons.photo_library_outlined,
               size: Responsive.sp(context, 16),
             ),
-            label: Text('Open Camera'),
+            label: Text('Choose from Gallery'),
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryBlue,
               foregroundColor: Colors.white,
@@ -218,7 +214,7 @@ class _HomePageState extends State<HomePage> {
           OutlinedButton.icon(
             onPressed: () async {
               await context.read<ClassifyProvider>().pickImage(
-                ImageSource.gallery,
+                ImageSource.camera,
               );
               if (context.read<ClassifyProvider>().imagePath != null &&
                   context.read<ClassifyProvider>().imagePath!.isNotEmpty) {
@@ -230,11 +226,11 @@ class _HomePageState extends State<HomePage> {
               }
             },
             icon: Icon(
-              Icons.photo_library_outlined,
+              Icons.camera_alt_outlined,
               color: primaryBlue,
               size: Responsive.sp(context, 15),
             ),
-            label: Text('Choose from Gallery'),
+            label: Text('Open Camera'),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: primaryBlue),
               foregroundColor: primaryBlue,

@@ -12,7 +12,6 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = AnimationController(
       vsync: this,

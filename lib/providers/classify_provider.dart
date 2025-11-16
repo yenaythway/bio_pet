@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-// import 'package:camera/camera.dart';
 import 'package:bio_pet/models/breed.dart';
 import 'package:bio_pet/models/history.dart';
 import 'package:flutter/services.dart';
@@ -19,17 +19,16 @@ class ClassifyProvider extends ChangeNotifier {
   Map<String, double>? breedMap;
   final imagePicker = ImagePicker();
   String breedName = "";
-  // int confidence = 10;
   List<EachBreed> breedList = [];
-  // int totalConfidence = 0;
-  static const modelPath = 'assets/models/mobilenet_quant.tflite';
-  static const labelsPath = 'assets/models/labels.txt';
-
+  List<EachClassifying> historyList = [];
   late final Interpreter interpreter;
   late final List<String> labels;
   late final IsolateInference isolateInference;
   late Tensor inputTensor;
   late Tensor outputTensor;
+
+  static const modelPath = 'assets/models/mobilenet_quant.tflite';
+  static const labelsPath = 'assets/models/labels.txt';
 
   // Load model
   Future<void> _loadModel() async {
@@ -116,7 +115,7 @@ class ClassifyProvider extends ChangeNotifier {
       breedMap = await inferenceImage(image!);
       setUpBreedList();
       // Persist full classification result to local history using SharedPreferences
-      await saveHistory();
+      await saveNewHistory();
       isLoading = false;
       notifyListeners();
     }
@@ -125,22 +124,40 @@ class ClassifyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveHistory() async {
+  Future<void> saveNewHistory() async {
     // Persist full classification result to local history using SharedPreferences
     try {
-      // Create a History model that includes the image path, timestamp, and
+      // Create a EachClassifying model that includes the image path, timestamp, and
       // the full list of breed results (ordered by confidence).
-      final entry = History(
+      final entry = EachClassifying(
         imagePath: imagePath ?? '',
         timestamp: DateTime.now(),
         breeds: breedList,
       );
+      historyList.insert(0, entry);
+      List<String> jsonHistoryList =
+          historyList.map((e) => jsonEncode(e.toMap())).toList();
 
       // Save as a map (LocalStorage expects a Map which it JSON-encodes)
-      await LocalStorage.save(key: 'history', item: entry.toMap());
+      await LocalStorage.save(key: 'history', list: jsonHistoryList);
     } catch (e) {
-      // ignore storage errors but keep app flow
       debugPrint('Local storage save error: $e');
+    }
+  }
+
+  Future<void> getHistoryList() async {
+    historyList.clear();
+    try {
+      final List<Map<String, dynamic>> storedItems = await LocalStorage.read(
+        key: 'history',
+      );
+      for (final item in storedItems) {
+        final EachClassifying historyEntry = EachClassifying.fromMap(item);
+        historyList.add(historyEntry);
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Local storage read error: $e');
     }
   }
 
@@ -157,6 +174,17 @@ class ClassifyProvider extends ChangeNotifier {
   Future<void> pickImage(ImageSource source) async {
     final result = await imagePicker.pickImage(source: source);
     imagePath = result?.path;
+    notifyListeners();
+  }
+
+  Future<void> removeFromHistory(EachClassifying item) async {
+    historyList.remove(item);
+
+    List<String> jsonHistoryList =
+        historyList.map((e) => jsonEncode(e.toMap())).toList();
+
+    // Save as a map (LocalStorage expects a Map which it JSON-encodes)
+    await LocalStorage.save(key: 'history', list: jsonHistoryList);
     notifyListeners();
   }
 
