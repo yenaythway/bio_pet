@@ -20,9 +20,9 @@ class ResultPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: lightTextColor),
           onPressed: () async {
             await context.read<ClassifyProvider>().getHistoryList();
-
-            // Handle back navigation
-            Navigator.pop(context);
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
           },
         ),
         title: const Text(
@@ -146,130 +146,146 @@ class ResultPage extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       separatorBuilder: (_, __) => const SizedBox(height: 10),
       itemBuilder: (context, i) {
-        return _buildBreedCard(breedList[i].name, breedList[i].acc, i == 0);
+        return _buildBreedCard(context, i, breedList);
       },
     );
   }
 
-  Widget _buildBreedCard(String breedName, int confidence, bool isMostMatched) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Breed Name & AI Confidence
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 3,
-                      height: isMostMatched ? 50 : 30,
-                      margin: const EdgeInsets.only(right: 10),
-                      color: primaryBlue,
-                    ),
+  Widget _buildBreedCard(
+    BuildContext context,
+    int index,
+    List<EachBreed> breedList,
+  ) {
+    {
+      bool isMostMatched = index == 0;
+      String breedName = breedList[index].name;
+      int confidence = breedList[index].acc;
+      return Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Breed Name & AI Confidence
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 3,
+                        height: isMostMatched ? 50 : 30,
+                        margin: const EdgeInsets.only(right: 10),
+                        color: primaryBlue,
+                      ),
 
-                    // SizedBox(width: 8),
+                      // SizedBox(width: 8),
 
-                    // SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            breedName.toUpperCase(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: const TextStyle(
-                              color: lightTextColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                      // SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              breedName.toUpperCase(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                color: lightTextColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          if (isMostMatched)
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                  size: 16,
-                                ),
-                                Text(
-                                  "Most Matched",
-                                  style: TextStyle(
+                            if (isMostMatched)
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
                                     color: Colors.green,
-                                    fontSize: 14,
+                                    size: 16,
                                   ),
-                                ),
-                              ],
-                            ),
-                        ],
+                                  Text(
+                                    "Most Matched",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
+                      SizedBox(width: 8),
+                    ],
+                  ),
+                ),
+                if (breedName != "Other Breeds")
+                  InkWell(
+                    onTap: () async {
+                      await context.read<ClassifyProvider>().openWikipedia(
+                        breedName,
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Read Details ',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 15,
+                            decorationColor:
+                                Colors
+                                    .blue, // Optional: customize underline color
+                            decorationThickness:
+                                2, // Optional: customize underline thickness
+                            decorationStyle: TextDecorationStyle.solid,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        Icon(Icons.open_in_new, size: 18, color: Colors.blue),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                  ],
-                ),
-              ),
-              if (breedName != "Other Breeds")
-                Row(
-                  children: [
-                    // Icon(Icons.search_outlined, color: Colors.blue, size: 18),
-                    const Text(
-                      'Read Details ',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 15,
-                        decorationColor:
-                            Colors.blue, // Optional: customize underline color
-                        decorationThickness:
-                            2, // Optional: customize underline thickness
-                        decorationStyle: TextDecorationStyle.solid,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    Icon(Icons.open_in_new, size: 18, color: Colors.blue),
-                  ],
-                ),
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Accuracy Level',
-                style: TextStyle(color: lightTextColor, fontSize: 13),
-              ),
-              Text(
-                '$confidence%',
-                style: const TextStyle(
-                  color: lightTextColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: LinearProgressIndicator(
-              value: confidence / 100, // 0.96 for 96%
-              minHeight: 10,
-              backgroundColor: faintTextColor.withOpacity(0.2),
-              valueColor: const AlwaysStoppedAnimation<Color>(primaryBlue),
+                  ),
+              ],
             ),
-          ),
-          SizedBox(height: 10),
-        ],
-      ),
-    );
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Accuracy Level',
+                  style: TextStyle(color: lightTextColor, fontSize: 13),
+                ),
+                Text(
+                  '$confidence%',
+                  style: const TextStyle(
+                    color: lightTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: LinearProgressIndicator(
+                value: confidence / 100, // 0.96 for 96%
+                minHeight: 10,
+                // backgroundColor: Colors.black.withAlpha(10),
+                valueColor: const AlwaysStoppedAnimation<Color>(primaryBlue),
+              ),
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
+      );
+    }
   }
 }

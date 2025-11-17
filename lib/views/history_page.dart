@@ -41,7 +41,9 @@ class HistoryPage extends StatelessWidget {
           onPressed: () async {
             await context.read<ClassifyProvider>().getHistoryList();
             // print("pressed back");
-            Navigator.pop(context);
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
           },
         ),
         title: const Text(
@@ -297,7 +299,10 @@ class DogHistoryCard extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {
+                onPressed: () async {
+                  await context.read<ClassifyProvider>().openWikipedia(
+                    item.breeds[0].name,
+                  );
                   // Handle search details action
                 },
                 icon: const Icon(Icons.open_in_new, size: 18),

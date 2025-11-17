@@ -167,13 +167,17 @@ class _HomePageState extends State<HomePage> {
               await context.read<ClassifyProvider>().pickImage(
                 ImageSource.gallery,
               );
-              if (context.read<ClassifyProvider>().imagePath != null &&
-                  context.read<ClassifyProvider>().imagePath!.isNotEmpty) {
-                await context.read<ClassifyProvider>().processImage();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ResultPage()),
-                );
+              if (context.mounted) {
+                if (context.read<ClassifyProvider>().imagePath != null &&
+                    context.read<ClassifyProvider>().imagePath!.isNotEmpty) {
+                  await context.read<ClassifyProvider>().processImage();
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultPage()),
+                    );
+                  }
+                }
               }
             },
             icon: Icon(
@@ -216,13 +220,17 @@ class _HomePageState extends State<HomePage> {
               await context.read<ClassifyProvider>().pickImage(
                 ImageSource.camera,
               );
-              if (context.read<ClassifyProvider>().imagePath != null &&
-                  context.read<ClassifyProvider>().imagePath!.isNotEmpty) {
-                await context.read<ClassifyProvider>().processImage();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ResultPage()),
-                );
+              if (context.mounted) {
+                if (context.read<ClassifyProvider>().imagePath != null &&
+                    context.read<ClassifyProvider>().imagePath!.isNotEmpty) {
+                  await context.read<ClassifyProvider>().processImage();
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultPage()),
+                    );
+                  }
+                }
               }
             },
             icon: Icon(
@@ -290,7 +298,7 @@ class _HomePageState extends State<HomePage> {
             stepNumber: 3,
             title: 'Get Results',
             description:
-                'View breed classification with unique ID and confidence scores',
+                'View breed classification with name and confidence scores',
           ),
 
           SizedBox(height: Responsive.hp(context, 1.5)),

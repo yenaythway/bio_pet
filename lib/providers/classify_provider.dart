@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:bio_pet/utils/local_storage.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ClassifyProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -203,5 +204,22 @@ class ClassifyProvider extends ChangeNotifier {
 
     return '${date.month}/${date.day}/${date.year} '
         '${twoDigits(hour)}:${twoDigits(date.minute)} $period';
+  }
+
+  Future<void> openWikipedia(String keyword) async {
+    print("in open wiki");
+    final url = Uri.parse("https://en.wikipedia.org/wiki/$keyword");
+
+    if (await canLaunchUrl(url)) {
+      // print("2222222");
+
+      // print(await canLaunchUrl(url));
+      // print("11111111");
+      // bool as =
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+      // print(as);
+    } else {
+      throw "Could not launch $url";
+    }
   }
 }
