@@ -45,7 +45,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
             child: Stack(
               children: [
                 Image.asset(
-                  'assets/images/logo1.png',
+                  'assets/images/logo.png',
                   height: 300,
                   width: double.infinity,
                   fit: BoxFit.cover,
