@@ -1,4 +1,4 @@
-package com.example.bio_pet
+package com.yenaythway.bio_pet
 
 import io.flutter.embedding.android.FlutterActivity
 

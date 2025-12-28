@@ -203,9 +203,54 @@ class DogHistoryCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
-                    // Handle delete action
-                    context.read<ClassifyProvider>().removeFromHistory(item);
+                  onPressed: () async {
+                    // Confirm deletion with the user before removing from history
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder:
+                          (ctx) => AlertDialog(
+                            backgroundColor: const Color.fromARGB(
+                              200,
+                              93,
+                              155,
+                              255,
+                            ),
+                            // title: const Text('Delete'),
+                            content: const Text(
+                              'Are you sure you want to delete this classification from history?',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(false),
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(true),
+                                child: const Text(
+                                  'Delete',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          ),
+                    );
+
+                    if (confirmed == true) {
+                      await context.read<ClassifyProvider>().removeFromHistory(
+                        item,
+                      );
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('History entry deleted'),
+                          ),
+                        );
+                      }
+                    }
                   },
                 ),
               ),

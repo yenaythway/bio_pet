@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:label="bio_pet"
+        android:label="Bio Pet"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
