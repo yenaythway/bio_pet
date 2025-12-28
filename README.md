@@ -23,6 +23,8 @@ Whether you're at a shelter, out for a walk, or curious about your own pet, this
 ---
 
 ## 📸 Demo & Screenshots
+![photo_2568-12-28 23 50 31](https://github.com/user-attachments/assets/42c91885-3f1b-4e36-a90e-1dc3c97a9237)
+
 <p align="center">
   <video src="https://github.com/user-attachments/assets/78c58824-c3ca-487d-b7b9-1d0a141ea7b8" width="300" controls></video>
   <br>
