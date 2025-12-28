@@ -24,7 +24,7 @@ Whether you're at a shelter, out for a walk, or curious about your own pet, this
 
 ## 📸 Demo & Screenshots
 <p align="center">
-  <video src="https://youtu.be/_RJpffEwNjM?si=ELLOpE79xE0UXFK9" width="300" controls></video>
+  <video src="https://github.com/user-attachments/assets/78c58824-c3ca-487d-b7b9-1d0a141ea7b8" width="300" controls></video>
   <br>
   <em>App walkthrough and breed recognition demo</em>
 </p>
