@@ -24,7 +24,7 @@ Whether you're at a shelter, out for a walk, or curious about your own pet, this
 
 ## 📸 Demo & Screenshots
 <p align="center">
-  <video src="YOUR_VIDEO_LINK_HERE" width="300" controls></video>
+  <video src="https://youtu.be/_RJpffEwNjM?si=ELLOpE79xE0UXFK9" width="300" controls></video>
   <br>
   <em>App walkthrough and breed recognition demo</em>
 </p>
@@ -58,4 +58,3 @@ This project is [MIT](https://opensource.org/licenses/MIT) licensed.
 <p align="center">
   Made with ❤️ for Pet Lovers
 </p>
-![photo_2568-12-28 23 50 31](https://github.com/user-attachments/assets/bf0eb442-bcff-43ef-8ea5-f5a6594cae3f)
