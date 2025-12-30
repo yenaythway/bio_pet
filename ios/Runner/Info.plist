@@ -71,5 +71,12 @@
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
 
+    <!-- Camera and Photo Library Permissions -->
+    <key>NSCameraUsageDescription</key>
+    <string>This app needs camera access to take photos of your pets for breed classification.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app needs photo library access to select pet photos for breed classification.</string>
+
 </dict>
 </plist>

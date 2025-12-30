@@ -1,22 +1,25 @@
-import 'package:bio_pet/utils/color_const.dart';
+import 'package:bio_pet/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class Loading extends StatefulWidget {
-  const Loading({super.key});
+/// Loading widget displayed during classification
+class LoadingWidget extends StatefulWidget {
+  const LoadingWidget({super.key});
 
   @override
-  State<Loading> createState() => _LoadingState();
+  State<LoadingWidget> createState() => _LoadingWidgetState();
 }
 
-class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
+class _LoadingWidgetState extends State<LoadingWidget>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
-    )..repeat(); // makes it rotate forever
+    )..repeat();
   }
 
   @override
@@ -27,16 +30,14 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // Added a boolean parameter to control loading state
     return Container(
       decoration: BoxDecoration(
-        color: primaryBlue, // Use cardColor for the container background
+        color: AppColors.primaryBlue,
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // This section will now conditionally show either the image or the loading UI
           ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12.0),
@@ -53,18 +54,17 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
                 Opacity(
                   opacity: 0.8,
                   child: Container(
-                    height: 300, // Maintain the same height as the image
+                    height: 300,
                     width: double.infinity,
-                    color:
-                        secondaryBlue, // A specific purplish-blue color for the loading area, derived from your screenshot
+                    color: AppColors.secondaryBlue,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         RotationTransition(
                           turns: _controller,
                           child: const Icon(
-                            Icons.sync, // Or Icons.autorenew for a similar look
-                            color: lightTextColor,
+                            Icons.sync,
+                            color: AppColors.lightTextColor,
                             size: 40,
                           ),
                         ),
@@ -72,7 +72,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
                         const Text(
                           'Classifying Image...',
                           style: TextStyle(
-                            color: lightTextColor,
+                            color: AppColors.lightTextColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
                           ),
@@ -85,18 +85,17 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-
-          // The status bar or a loading-specific bottom section
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Container(
               alignment: Alignment.center,
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.hourglass_bottom, size: 16, color: Colors.white),
-                  const Text(
-                    ' Analyzing data...',
+                  SizedBox(width: 8),
+                  Text(
+                    'Analyzing data...',
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ],

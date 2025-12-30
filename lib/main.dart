@@ -1,13 +1,32 @@
-import 'package:bio_pet/providers/classify_provider.dart';
-import 'package:bio_pet/views/home_page.dart';
+import 'package:bio_pet/providers/classification_provider.dart';
+import 'package:bio_pet/providers/history_provider.dart';
+import 'package:bio_pet/services/classification_service.dart';
+import 'package:bio_pet/services/history_service.dart';
+import 'package:bio_pet/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize services
+  final classificationService = ClassificationService();
+  final historyService = HistoryService();
+
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ClassifyProvider())],
+      providers: [
+        ChangeNotifierProvider(
+          create:
+              (_) => ClassificationProvider(
+                classificationService: classificationService,
+                historyService: historyService,
+              ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => HistoryProvider(historyService: historyService),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
