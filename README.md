@@ -9,87 +9,99 @@
 ---
 
 ## 🧐 Overview
-AI Pet Breed Identifier is a mobile app that detects **dog and cat breeds** using your camera or gallery.  
-The AI runs **fully on-device**, so it works **offline**, is **fast**, and keeps user data **private**.
+AI Pet Breed Identifier helps you discover the **breed of any dog or cat** instantly using your camera or gallery.
 
-This project is built for **Flutter AI/ML developers** who want efficient ML with smooth UI performance.
+The AI runs **directly on your device**, so the app works **offline**, responds **fast**, and keeps user data **private**.
+
+This project is designed as a **real-world reference for Flutter AI/ML developers**, combining efficient ML models with smooth UI performance.
 
 ---
 
 ## ✨ Key Features
-- 🐶 Dog breed identification  
-- 🐱 Cat breed identification  
-- 🔌 Fully offline AI (on-device)  
-- 📸 Camera & gallery support  
-- 📜 Classification history  
-- 🌐 Open breed details in browser  
+- 🐶 **AI Dog Breed Identifier** – Recognize hundreds of dog breeds  
+- 🐱 **AI Cat Breed Identifier** – Classify cat breeds accurately  
+- 🔌 **Offline Classification** – No internet required  
+- 📸 **Camera & Gallery Support** – Live scan or upload photos  
+- 📜 **Classification History** – Automatically save past results  
+- 🌐 **Deep Dive** – Open detailed breed information in browser  
+
+---
+
+## 📸 Demo & Screenshots
+![photo_2568-12-28 23 50 31](https://github.com/user-attachments/assets/42c91885-3f1b-4e36-a90e-1dc3c97a9237)
+
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/78c58824-c3ca-487d-b7b9-1d0a141ea7b8" width="300" controls></video>
+  <br>
+  <em>App walkthrough and breed recognition demo</em>
+</p>
 
 ---
 
 ## 🧠 AI Model: MobileNet
-This app uses **MobileNet**, a lightweight deep learning model designed for mobile devices.
+This app uses **MobileNet**, a lightweight and mobile-optimized deep learning model.
 
 ### Why MobileNet?
-- ⚡ Fast inference  
+- ⚡ Fast inference on mobile devices  
 - 📦 Small model size  
 - 🔋 Low memory and battery usage  
-- 📱 Ideal for on-device Flutter apps  
+- 📱 Ideal for on-device Flutter AI apps  
 
-MobileNet provides a strong balance between **speed and accuracy**.
+MobileNet provides a good balance between **speed and accuracy**, making it suitable for real-time pet breed recognition.
 
 ---
 
 ## 🚀 Flutter Performance: Isolate Inference
-AI inference runs inside a **Flutter Isolate** to keep the UI responsive.
+To avoid UI lag, AI inference runs inside a **Flutter Isolate**.
 
-### Benefits
-- 🧵 Runs heavy AI work in a separate thread  
-- 🚫 Prevents UI freeze  
-- 🎯 Smooth camera preview and animations  
-- ⚡ Better app performance  
+### Benefits of Isolate Inference
+- 🧵 Heavy ML work runs in a separate thread  
+- 🚫 Prevents UI freezing  
+- 🎯 Smooth camera preview and scrolling  
+- ⚡ Better user experience  
 
 ---
 
-## 🧩 MobileNet + Isolate
-Combining **MobileNet** with **Isolate-based inference** gives:
-- Real-time predictions  
-- Efficient on-device ML  
+## 🧩 MobileNet + Isolate (Best Practice)
+By combining **MobileNet** with **Isolate-based inference**, this app achieves:
+- Real-time breed prediction  
+- Efficient on-device AI  
 - Smooth Flutter UI  
-- A solid reference for Flutter AI/ML developers  
+- A practical pattern for **Flutter AI/ML developers**
 
 ---
 
 ## 🛠️ How It Works
-1. Capture or select a pet image  
-2. MobileNet analyzes the image  
-3. Inference runs in a Flutter Isolate  
-4. Breed result is displayed and saved  
+1. **Capture** – Use camera or select an image  
+2. **Process** – MobileNet analyzes visual features (ears, coat, snout)  
+3. **Inference** – Runs inside a Flutter Isolate  
+4. **Result** – Breed is shown and saved to history  
 
 ---
 
 ## 🚀 Getting Started
 ### Prerequisites
-- Android 8.0+ / iOS 13+
-- Camera permission
+- Android 8.0+ or iOS 13+
+- Camera access
 
 ### Installation
-1. Download the latest build from **Releases**
-2. Install the app
-3. Grant required permissions
+1. Download the latest APK/Build from the **Releases** section  
+2. Install on your device  
+3. Grant camera permission when prompted  
 
 ---
 
 ## 🤝 Contributing
-Contributions, issues, and feature requests are welcome.
+Contributions, issues, and feature requests are welcome.  
+Feel free to check the **issues page**.
 
 ---
 
 ## 🛡️ License
-MIT License
+This project is licensed under the **MIT License**.
 
 ---
 
 <p align="center">
   Made with ❤️ for Pet Lovers & Flutter AI Developers
 </p>
-
