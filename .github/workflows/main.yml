@@ -1,0 +1,55 @@
+name: Keep Hugging Face Space Alive
+
+on:
+  schedule:
+    # Run every 1 hours
+    - cron: '0 */1 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone and Update Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HUGGING_FACE_JOB }}
+        run: |
+          # Configure git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Clone the Hugging Face Space repo
+          git clone https://YeNayThway:$HF_TOKEN@huggingface.co/spaces/YeNayThway/YoutubeAutomation hf-space
+          cd hf-space
+          
+          # Get current timestamp
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          
+          # Initialize or update README_HF.md
+          if [ -f README_HF.md ]; then
+            # Extract current count, default to 0 if not found
+            CURRENT_COUNT=$(grep -oP 'Keep-alive count: \K\d+' README_HF.md || echo "0")
+            NEW_COUNT=$((CURRENT_COUNT + 1))
+          else
+            NEW_COUNT=1
+          fi
+          
+          # Write updated README_HF.md
+          cat > README_HF.md << EOF
+          # Keep-Alive Status
+          
+          Last ping: $TIMESTAMP
+          Keep-alive count: $NEW_COUNT
+          
+          ---
+          *This file is automatically updated every 3 hours to keep the Space active.*
+          EOF
+          
+          # Commit and push
+          git add README_HF.md
+          git commit -m "Keep-alive: $TIMESTAMP (count: $NEW_COUNT)"
+          git push
+          
+          echo "Successfully updated README_HF.md"
+          echo "Timestamp: $TIMESTAMP"
+          echo "Count: $NEW_COUNT"
